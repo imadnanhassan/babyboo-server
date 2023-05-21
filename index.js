@@ -14,24 +14,33 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.eqk9iwm.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+   serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+   }
 });
 
 async function run() {
-  try {
-    await client.connect();
+   try {
+      await client.connect();
 
-   const addToyCollection = client.db('babybo').collection('babybos');
+      const addToyCollection = client.db('babybo').collection('babybos');
+      app.post('/addoty', async (req, res) => {
+         const addtoy = req.body;
+         console.log(booking);
+         const result = await addToyCollection.insertOne(addtoy);
+         res.send(result);
+      });
 
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    await client.close();
-  }
+
+
+
+      await client.db("admin").command({ ping: 1 });
+      console.log("Pinged your deployment. You successfully connected to MongoDB!");
+   } finally {
+      //  await client.close();
+   }
 }
 run().catch(console.dir);
 
