@@ -27,17 +27,16 @@ async function run() {
 
       const addToyCollection = client.db('babybo').collection('babybos');
       
-      app.patch('/bookings/:id', async (req, res) => {
+      app.get('/services/:id', async (req, res) => {
          const id = req.params.id;
-         const filter = { _id: new ObjectId(id) };
-         const updatedBooking = req.body;
-         console.log(updatedBooking);
-         const updateDoc = {
-             $set: {
-                 status: updatedBooking.status
-             },
+         const query = { _id: new ObjectId(id) }
+
+         const options = {
+             // Include only the `title` and `imdb` fields in the returned document
+             projection: { title: 1, price: 1, service_id: 1, img: 1 },
          };
-         const result = await bookingCollection.updateOne(filter, updateDoc);
+
+         const result = await serviceCollection.findOne(query, options);
          res.send(result);
      })
 
