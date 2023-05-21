@@ -26,28 +26,15 @@ async function run() {
       await client.connect();
 
       const addToyCollection = client.db('babybo').collection('babybos');
-      app.post('/addoty', async (req, res) => {
-         const addtoy = req.body;
-         console.log(booking);
-         const result = await addToyCollection.insertOne(addtoy);
-         res.send(result);
-      });
-
-      app.patch('/addtoy/:id', async (req, res) => {
+      
+      app.delete('/bookings/:id', async (req, res) => {
          const id = req.params.id;
-         const filter = { _id: new ObjectId(id) };
-         const updatedBooking = req.body;
-         console.log(updatedBooking);
-         const updateDoc = {
-             $set: {
-                 status: updatedBooking.status
-             },
-         };
-         const result = await bookingCollection.updateOne(filter, updateDoc);
+         const query = { _id: new ObjectId(id) }
+         const result = await bookingCollection.deleteOne(query);
          res.send(result);
      })
 
-
+     
 
 
       await client.db("admin").command({ ping: 1 });
