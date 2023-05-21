@@ -27,14 +27,21 @@ async function run() {
 
       const addToyCollection = client.db('babybo').collection('babybos');
       
-      app.delete('/bookings/:id', async (req, res) => {
+      app.patch('/bookings/:id', async (req, res) => {
          const id = req.params.id;
-         const query = { _id: new ObjectId(id) }
-         const result = await bookingCollection.deleteOne(query);
+         const filter = { _id: new ObjectId(id) };
+         const updatedBooking = req.body;
+         console.log(updatedBooking);
+         const updateDoc = {
+             $set: {
+                 status: updatedBooking.status
+             },
+         };
+         const result = await bookingCollection.updateOne(filter, updateDoc);
          res.send(result);
      })
 
-     
+
 
 
       await client.db("admin").command({ ping: 1 });
